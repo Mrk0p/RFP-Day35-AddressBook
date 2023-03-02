@@ -1,10 +1,17 @@
 package com.bridgelabz.address_book;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AddressBookMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         HashMap<String,AddressBook> dictionary = new HashMap<>();
         AddressBook book = new AddressBook();
         Scanner input = new Scanner(System.in);
@@ -19,7 +26,8 @@ public class AddressBookMain {
             System.out.print("6.Add new Address Book\n");
             System.out.print("7.Search a person by City\t");
             System.out.print("8.Search a person by State\t");
-            System.out.print("9.Exit\n");
+            System.out.print("9.Sort by City\t");
+            System.out.print("10.Exit\n");
             System.out.print("Enter an option from above :- ") ;
             option = input.nextInt() ;
 
@@ -124,10 +132,35 @@ public class AddressBookMain {
                     }
                     break;
                 case 9 :
+                    System.out.println("Enter name of address book in which you want to sort contact by city : ");
+                    String addressBookName7 = input.next();
+                    if(dictionary.containsKey(addressBookName7)){
+                        System.out.println(addressBookName7 + " Address book exist.");
+                        AddressBook addressBook = dictionary.get(addressBookName7);
+                        addressBook.sortByCity();
+                    }
+                    else {
+                        System.out.println("Address Book does not exist");
+                    }
+                    break;
+                case 10 :
                     System.out.println("Exiting from dictionary");
                     break;
 
             }
-        }while (option != 9);
+        }while (option != 10);
+
+        Path path = Paths.get("C:\\Users\\sachi\\IdeaProjects\\Day35-AddressBook\\src\\main\\java\\com\\bridgelabz\\address_book\\AddressBook.txt");
+        try {
+            Files.deleteIfExists(path);
+            Files.write(path, dictionary.keySet().stream().map(key -> dictionary.get(key).toString()).collect(Collectors.toList()),
+                    StandardOpenOption.CREATE);
+
+            List<String> readAllLines = Files.readAllLines(path);
+            readAllLines.stream().forEach(line -> System.out.println(line));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
