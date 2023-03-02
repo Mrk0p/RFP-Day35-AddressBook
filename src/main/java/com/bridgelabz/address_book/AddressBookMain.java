@@ -1,17 +1,22 @@
 package com.bridgelabz.address_book;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class AddressBookMain {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
         HashMap<String,AddressBook> dictionary = new HashMap<>();
         AddressBook book = new AddressBook();
         Scanner input = new Scanner(System.in);
@@ -151,15 +156,81 @@ public class AddressBookMain {
         }while (option != 10);
 
         Path path = Paths.get("C:\\Users\\sachi\\IdeaProjects\\Day35-AddressBook\\src\\main\\java\\com\\bridgelabz\\address_book\\AddressBook.txt");
-        try {
+
+        try{
             Files.deleteIfExists(path);
-            Files.write(path, dictionary.keySet().stream().map(key -> dictionary.get(key).toString()).collect(Collectors.toList()),
-                    StandardOpenOption.CREATE);
+            Files.write(path,
+                    dictionary.keySet().stream().map(key -> dictionary.get(key).toString()).collect(Collectors.toList()), StandardOpenOption.CREATE);
 
             List<String> readAllLines = Files.readAllLines(path);
             readAllLines.stream().forEach(line -> System.out.println(line));
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 
+        // writeCSV
+
+        String csvPath = "C:\\Users\\sachi\\IdeaProjects\\Day35-AddressBook\\src\\main\\java\\com\\bridgelabz\\address_book\\addressbook.csv";
+
+        FileWriter fileWriter = null;
+
+
+        try {
+            fileWriter = new FileWriter(csvPath);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        CSVWriter writer = new CSVWriter(fileWriter);
+
+        String[] header = {"FirstName","LastName","Email","Address","City","State","Zipcode","PhoneNumber"};
+        writer.writeNext(header);
+
+        List<String[]> csvLines = new ArrayList<String[]>();
+        dictionary.keySet().stream().forEach(bookName -> dictionary.get(bookName).getPersons()
+                .stream().forEach(person -> csvLines.add(person.getContactStrings())));
+
+
+        writer.writeAll(csvLines);
+
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Reading CSV
+
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(csvPath);
+        } catch (FileNotFoundException e) {
+
+            e.printStackTrace();
+        }
+
+        CSVReader reader = new CSVReaderBuilder(fileReader).build();
+
+        List<String[]> linesOfData = null;
+
+        try {
+            linesOfData = reader.readAll();
+        } catch (IOException | CsvException e) {
+
+            e.printStackTrace();
+        }
+
+        System.out.println("\nReading data from csv file:");
+        linesOfData.stream().forEach(csvs -> {
+            for (String value : csvs)
+                System.out.print(value + "\t");
+            System.out.println();
+        });
+
+        try {
+            reader.close();
+        } catch (IOException e) {
+
             e.printStackTrace();
         }
     }

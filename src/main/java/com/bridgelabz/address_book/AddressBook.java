@@ -30,6 +30,11 @@ public class AddressBook {
         }
     }
 
+    public ArrayList<Contact> getPersons() {
+        return contacts;
+    }
+
+
 
     public void editPersonDetails(){
         Scanner input1 = new Scanner(System.in);

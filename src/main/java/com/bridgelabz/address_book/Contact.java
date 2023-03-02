@@ -112,6 +112,10 @@ public class Contact {
         email = input.next();
     }
 
+    String[] getContactStrings() {
+        return new String[] {firstName, lastName, email, address, city, state, zipcode + "", phoneNumber + ""};
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
