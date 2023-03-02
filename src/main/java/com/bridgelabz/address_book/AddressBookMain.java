@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class AddressBookMain {
-
     public static void main(String[] args) {
         HashMap<String,AddressBook> dictionary = new HashMap<>();
         AddressBook book = new AddressBook();
