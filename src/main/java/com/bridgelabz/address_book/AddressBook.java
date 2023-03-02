@@ -2,9 +2,9 @@ package com.bridgelabz.address_book;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class AddressBook {
-
 
     ArrayList<Contact> contacts = new ArrayList<>();
 
@@ -71,14 +71,22 @@ public class AddressBook {
     public void deleteContact(){
         Scanner input1 = new Scanner(System.in);
         System.out.println(contacts);
-        System.out.println("Enter name to edit : " );
+        System.out.println("Enter name to delete : " );
         String name = input1.next();
         for (Contact person:contacts) {
-            if (person.getFirstName().equals(name)) {
-                contacts.remove(person);
+            Predicate<String> personName = str -> str.equals(person.getFirstName());
+            if(contacts.removeIf(contact -> personName.test(name))){
+                System.out.println("Contact deleted successfully !!!");
             }
         }
     }
+
+    public void displayContact(){
+        for (Contact contact:contacts) {
+            System.out.println(contact);
+        }
+    }
+
 
     @Override
     public String toString() {
