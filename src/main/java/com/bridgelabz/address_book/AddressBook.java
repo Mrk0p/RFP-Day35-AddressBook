@@ -13,14 +13,22 @@ public class AddressBook {
         System.out.println("Enter details : ");
         Contact person = new Contact();
         person.getPersonDetails();
-        contacts.add(person);
+        int present = 0;
+        for (Contact contact :contacts) {
+            if (contact.getFirstName().equals(person.getFirstName())){
+                present = 1;
+                System.out.println("Person already exist");
+                break;
+            }
+        }
+        if (present==0){
+            contacts.add(person);
+        }
     }
-
-
 
     public void editPersonDetails(){
         Scanner input1 = new Scanner(System.in);
-        System.out.println("Enter name to edit : " );
+        System.out.println("Enter name to edit : " ) ;
         String name = input1.next();
         for (Contact person:contacts) {
             if (person.getFirstName().equals(name)) {
@@ -86,7 +94,6 @@ public class AddressBook {
             System.out.println(contact);
         }
     }
-
 
     @Override
     public String toString() {
