@@ -1,6 +1,7 @@
 package com.bridgelabz.address_book;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -129,6 +130,11 @@ public class AddressBook {
         long count = contacts.stream().filter(contactPredicate1).count();
         System.out.println(contactHashMap2.keySet());
         System.out.println("Number of persons of same name are : " + count);
+    }
+
+    public void sortByNames(){
+        Comparator<Contact> contactComparable = (a, b) -> a.compareTo(b);
+        contacts.stream().sorted(contactComparable).forEach(x -> System.out.println(x));
     }
 
     @Override

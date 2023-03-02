@@ -1,10 +1,11 @@
 package com.bridgelabz.address_book;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Contact {
 
-    private String firstName ;
+    private String firstName;
     private String lastName;
     private String address;
     private String city;
@@ -90,10 +91,10 @@ public class Contact {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-    public void getPersonDetails(){
 
+    public void getPersonDetails(){
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter First Name : ");
+        System.out.print("Enter First Name : ") ;
         firstName = input.next();
         System.out.print("Enter Lat Name : ");
         lastName = input.next();
@@ -110,8 +111,23 @@ public class Contact {
         System.out.print("Enter Email ID : ");
         email = input.next();
     }
-    public String toString() {
-        return "Contact{" +
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(firstName, contact.firstName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName);
+    }
+
+    @Override
+    public String toString(){
+        return  "Contact{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
@@ -121,6 +137,12 @@ public class Contact {
                 ", phoneNumber=" + phoneNumber +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public int compareTo(Object o) {
+        Contact contact = (Contact) o;
+        int compareResult = this.firstName.compareTo(contact.firstName);
+        return compareResult;
     }
 }
 
